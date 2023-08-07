@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Calculadora de Función Cuadrática</title>
+  <script src="https://cdn.jsdelivr.net/npm/mathjs"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+
+</head>
+<body>
+  <h1>Calculadora de Función Cuadrática</h1>
+  <p>Ingresa una función cuadrática (ejemplo: x^2 + 2x + 1):</p>
+  <input type="text" id="funcionInput" placeholder="Ingresa la función cuadrática">
+  <button onclick="calcular()">Calcular</button>
+  <div id="resultado"></div>
+  <canvas id="grafico"></canvas>
+
+  <script>
+    function calcular() {
+      var funcionInput = document.getElementById("funcionInput").value;
+      var resultadoDiv = document.getElementById("resultado");
+      var graficoCanvas = document.getElementById("grafico");
+
+      // Evaluar la función y generar puntos para el gráfico
+      var data = [];
+      for (var x = -10; x <= 10; x++) {
+        var y = evaluarFuncion(funcionInput, x);
+        data.push({ x: x, y: y });
+      }
+
+      // Mostrar resultado
+      resultadoDiv.innerHTML = "Resultado de la función para x=5: " + evaluarFuncion(funcionInput, 5);
+
+      // Crear el gráfico
+      var ctx = graficoCanvas.getContext("2d");
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          datasets: [{
+            label: 'Función Cuadrática',
+            data: data,
+            borderColor: 'blue',
+            fill: false,
+          }]
+        },
+        options: {
+          scales: {
+            x: {
+              type: 'linear',
+              position: 'bottom'
+            },
+            y: {
+              beginAtZero: false
+            }
+          }
+        }
+      });
+    }
+
+    function evaluarFuncion(func, x) {
+      var scope = { x: x };
+      var compiled = math.compile(func);
+      return compiled.evaluate(scope);
+    }
+  </script>
+</body>
+</html>
